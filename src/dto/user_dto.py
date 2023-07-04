@@ -1,25 +1,20 @@
 from email_validator import  EmailNotValidError, validate_email
 from phonenumbers import is_valid_number, parse, NumberParseException
 from pydantic import BaseModel, EmailStr, ValidationError, validator
-from validate_docbr import CNPJ
+
+from src.dto.helpers.cpf_cnpj_helper import Documento
 
 class UserDto(BaseModel):
-    user:str
+    document:str
     password:str
     company_name:str
-    cnpj:str
     email:str
     phone_number:str
 
-    @validator('cnpj')
-    def validateCnpj(cls, cnpj):
-            
-        cnpj_validator = CNPJ()
-        is_valid = cnpj_validator.validate(cnpj)
-        if not is_valid:
-            raise ValueError('CNPJ inválido')
-        
-        return cnpj_validator.mask(cnpj)
+    @validator('document')
+    def validateCnpj(cls, document):
+        document = Documento.criaDocumento(document)
+        return str(document)
 
     @validator('email')
     def validateEmail(cls, email):

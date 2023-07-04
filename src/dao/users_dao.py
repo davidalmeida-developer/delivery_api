@@ -1,6 +1,7 @@
 from typing import  Dict, List
 
 from pymongo.collection import Collection
+from src.errors.errors import UserAlreadyExistsException
 
 from src.dto.login_dto import LoginDto
 from src.dto.user_dto import UserDto
@@ -13,10 +14,14 @@ class UsersDao:
         self.client = InitDb().connectDb()
 
     def insertUser(self, user:UserDto):
-
+        
         user_dict = user.__dict__
-        colecao = self.setColecao()
-        result = colecao.insert_one(user_dict)
+        collection = self.setColecao()
+        
+        if collection.count_documents({'email': user_dict['email']}) > 0:
+            raise UserAlreadyExistsException()
+
+        result = collection.insert_one(user_dict)
 
         return str(result.inserted_id)
     

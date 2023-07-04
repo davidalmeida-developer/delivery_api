@@ -2,6 +2,7 @@ import json
 
 from flask import request, jsonify
 from pydantic import ValidationError
+from src.errors.errors import UserAlreadyExistsException
 
 from src.dto.login_dto import LoginDto
 from src.dto.user_dto import UserDto
@@ -40,6 +41,8 @@ def register():
     except (ValidationError, ValueError) as e:
         value = str(e.errors()[0]['msg'])
         return({'Erro de validação': value}, 400, {})
+    except (UserAlreadyExistsException) as e:
+        return ({'Erro': str(e)}, 400, {})
     except Exception as e:
-        return ({'Erro': e}, 500, {})
+        return ({'Erro': str(e)}, 500, {})
     
