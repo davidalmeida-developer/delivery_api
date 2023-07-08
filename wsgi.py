@@ -3,6 +3,7 @@ from settings import app
 
 import src.controller.ping_controlller
 import src.controller.user_controller
+import src.controller.order_controller
 
 
 
