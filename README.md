@@ -1,2 +1,2 @@
 # Delivery API
-Aplicação responsável pelo ciclo de vida, integração entre clientes e entregadores, assim como o gerenciamento de usuários.
+Aplicação responsável pela integração entre estabelecimentos e entregadores, assim como cadastros e consulta de pedidos, clientes e usuários.
