@@ -12,7 +12,7 @@ class UserDto(BaseModel):
     phone_number:str
 
     @validator('document')
-    def validateCnpj(cls, document):
+    def validateDocument(cls, document):
         document = Documento.criaDocumento(document)
         return str(document)
 
