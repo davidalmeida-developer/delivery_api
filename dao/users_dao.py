@@ -1,9 +1,9 @@
 from pymongo.collection import Collection
-from src.errors.errors import UserAlreadyExistsException
+from errors.errors import UserAlreadyExistsException
 
-from src.dto.user_dtos.login_dto import LoginDto
-from src.dto.user_dtos.user_dto import UserDto
-from src.db.init_db import InitDb
+from dto.user_dtos.login_dto import LoginDto
+from dto.user_dtos.user_dto import UserDto
+from db.init_db import InitDb
 from settings import DATABASE_NAME
 
 
@@ -18,7 +18,7 @@ class UsersDao:
         return db['users']
 
     def insertUser(self, user: UserDto):
-        if self.collection.count_documents({'email': user['email']}) > 0:
+        if self.collection.count_documents({'email': user.email}) > 0:
             raise UserAlreadyExistsException()
 
         result = self.collection.insert_one(user.__dict__)

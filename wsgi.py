@@ -1,10 +1,10 @@
 from settings import app
 
 
-import src.controller.ping_controlller
-import src.controller.user_controller
-import src.controller.order_controller
-
+import controller.ping_controlller
+import controller.user_controller
+import controller.order_controller
+import controller.customer_controller
 
 
 if __name__ == '__main__':

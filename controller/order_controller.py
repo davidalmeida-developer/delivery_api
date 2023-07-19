@@ -2,9 +2,9 @@ import json
 from flask import request
 from pydantic import ValidationError
 
-from src.dto.order_dtos.order_dto import OrderDto
-from src.errors.errors import OrderIdNotFoundException
-from src.service.service import Service
+from dto.order_dtos.order_dto import OrderDto
+from errors.errors import OrderIdNotFoundException
+from service.service import Service
 from settings import app, serialize, logger
 
 

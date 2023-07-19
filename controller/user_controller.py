@@ -1,11 +1,11 @@
 import json
 from flask import request
 from pydantic import ValidationError
-from src.errors.errors import UserAlreadyExistsException
+from errors.errors import UserAlreadyExistsException
 
-from src.dto.user_dtos.login_dto import LoginDto
-from src.dto.user_dtos.user_dto import UserDto
-from src.service.service import Service
+from dto.user_dtos.login_dto import LoginDto
+from dto.user_dtos.user_dto import UserDto
+from service.service import Service
 from settings import app, serialize, logger
 
 
@@ -31,17 +31,17 @@ def login():
 @app.route('/register', methods=["POST"])
 def register():
     try:
-        print(request.data)
+        logger.info(request.json)
 
-        register_data = UserDto(**request.json)
+        user_dto = UserDto(**request.json)
 
         service = Service()
 
-        user = service.register(user_dto=register_data)
+        user = service.register(user_dto=user_dto)
 
         return (json.dumps(user), 201, {})
     except (ValidationError, ValueError) as e:
-        value = str(e.errors()[0]['msg'])
+        value = f'{str(e.errors()[0]["msg"])}: {str(e.errors()[0]["loc"][0])}'
         return ({'Erro de validação': value}, 400, {})
     except (UserAlreadyExistsException) as e:
         return ({'Erro de validação': str(e)}, 400, {})
