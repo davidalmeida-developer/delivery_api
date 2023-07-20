@@ -13,16 +13,16 @@ class OrdersDao():
     def __init__(self) -> None:
         self.client = InitDb().connectDb()
         self.collection = self.setCollection()
-        self.order_id_dao = OrderIdsDao()
+        self.order_ids_dao = OrderIdsDao()
 
     def setCollection(self) -> Collection:
         db = self.client[DATABASE_NAME]
         return db['orders']
 
-    def insertOrder(self, order_dto: OrderDto) -> int:
-        order = order_dto.__dict__
+    def insertOrder(self, order: Dict) -> int:
 
-        order['order_id'] = self.order_id_dao.getId()
+        order['order_id'] = self.order_ids_dao.getId()
+        order['status'] = 'pendente'
 
         self.collection.insert_one(order)
 
@@ -43,6 +43,12 @@ class OrdersDao():
 
         if result.modified_count == 1:
             return True
+        raise OrderIdNotFoundException()
+
+    def deleteOrder(self, order_id: int):
+        result = self.collection.delete_one({'order_id': order_id})
+        if result.deleted_count == 1:
+            return
         raise OrderIdNotFoundException()
 
 

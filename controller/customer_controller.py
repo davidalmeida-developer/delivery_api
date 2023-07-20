@@ -24,7 +24,7 @@ def create_customer():
 
         customer = service.createCustomer(customer_dto)
 
-        return (json.dumps(customer, default=serialize), 200, {})
+        return (json.dumps(customer, default=serialize), 201, {})
     except (ValidationError, ValueError) as e:
         logger.error(e.args[0])
         return ({'Erro de validação': e.args[0]}, 400, {})

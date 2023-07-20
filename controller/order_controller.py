@@ -19,7 +19,7 @@ def create_order():
 
         user = service.createOrder(order_dto)
 
-        return (json.dumps(user, default=serialize), 200, {})
+        return (json.dumps(user, default=serialize), 201, {})
     except (ValidationError, ValueError) as e:
         logger.error(e.args[0])
         return ({'Erro de validação': e.args[0]}, 400, {})
@@ -41,7 +41,7 @@ def get_orders():
 
         orders = service.getOrders(limit)
 
-        return (json.dumps(orders), 200, {})
+        return (json.dumps(orders, default=serialize), 200, {})
     except Exception as e:
         return ({'Erro': str(e)}, 500, {})
 
@@ -56,6 +56,25 @@ def update_order(order_id):
         service = Service()
 
         user = service.updateOrder(order_id, order_dto)
+
+        return (json.dumps(user), 204, {})
+    except (ValidationError, ValueError) as e:
+        value = str(e.errors()[0]['msg'])
+        return ({'Erro de validação': value}, 400, {})
+    except OrderIdNotFoundException as e:
+        return ({'Erro de validação': str(e)}, 400, {})
+    except Exception as e:
+        return ({'Erro': str(e)}, 500, {})
+
+
+@app.route('/orders/<order_id>', methods=["DELETE"])
+def delete_order(order_id):
+    try:
+        logger.info(request.json)
+
+        service = Service()
+
+        user = service.deleteOrder(int(order_id))
 
         return (json.dumps(user), 204, {})
     except (ValidationError, ValueError) as e:

@@ -39,6 +39,12 @@ class CustomersDao:
             return result[0]
         raise CustomerIdNotFoundException()
 
+    def getCustomerById(self, customer_id: int):
+        result = self.collection.find_one({'customer_id': customer_id})
+        if result:
+            return result
+        raise CustomerIdNotFoundException()
+
     def updateCustomer(self, customer_id: int, customer_dto: CustomerDto) -> bool:
         result = self.collection.update_one(
             filter={'customer_id': customer_id}, update=customer_dto.__dict__)

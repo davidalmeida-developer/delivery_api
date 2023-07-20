@@ -22,7 +22,12 @@ class Service:
 
     # Orders
     def createOrder(self, order_dto: OrderDto):
-        return self.orders_dao.insertOrder(order_dto)
+        order = order_dto.dict()
+
+        order['company'] = self.users_dao.getUserById(order_dto.company_id)
+        order['customer'] = self.customers_dao.getCustomerById(order_dto.customer_id)
+        
+        return self.orders_dao.insertOrder(order)
 
     def getOrders(self, limit: int):
         return self.orders_dao.getAll(limit)
@@ -32,6 +37,9 @@ class Service:
 
     def updateOrder(self, order_id: int, order_dto: OrderDto) -> bool:
         return self.orders_dao.updateOrder(order_id, order_dto)
+    
+    def deleteOrder(self, order_id: int):
+        self.orders_dao.deleteOrder(order_id)
 
     # Customers
     def createCustomer(self, customer_dto: CustomerDto):
